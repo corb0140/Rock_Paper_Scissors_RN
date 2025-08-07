@@ -20,7 +20,19 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="game" />
+      <Stack.Screen
+        name="game"
+        options={{
+          title: "Rock Paper Scissors",
+          headerTitleStyle: {
+            fontFamily: "Inter-SemiBold",
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: Colors.background,
+          },
+        }}
+      />
       <Stack.Screen
         name="settings"
         options={{

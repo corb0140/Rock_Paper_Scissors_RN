@@ -29,7 +29,10 @@ export default function Index() {
         <Text style={[styles.logoText, { color: Colors.lightBlue }]}>S</Text>
       </View>
 
-      <TouchableOpacity style={styles.buttonWrapper}>
+      <TouchableOpacity
+        style={styles.buttonWrapper}
+        onPress={() => router.push("/game")}
+      >
         <View style={styles.button}>
           <Text style={styles.buttonText}>Start Game</Text>
           <Ionicons name="chevron-forward" size={25} color={Colors.brown} />
