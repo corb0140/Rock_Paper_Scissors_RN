@@ -8,7 +8,7 @@ export const gameModeDescription: any = {
 };
 
 export const difficultyDescription: any = {
-  Easy: "The computer will make random choices, making it easier for you to win.",
+  Easy: "The computer health is equal to the player health and deals normal damage.",
   Medium: "The computer has double the health of the player.",
   Hard: "The computer has double the health of the player and deals double damage.",
 };

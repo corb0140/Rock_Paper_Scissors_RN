@@ -34,9 +34,8 @@ export default function RootLayout() {
                 fontFamily: "Inter-SemiBold",
               },
               headerTitleAlign: "center",
-              headerStyle: {
-                backgroundColor: Colors.background,
-              },
+              headerShown: false,
+              // headerTransparent: true,
             }}
           />
 
