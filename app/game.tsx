@@ -1,11 +1,18 @@
+import { useAppSelector } from "@/hooks/reduxHooks";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
-export default function game() {
+export default function Game() {
+  const gameMode = useAppSelector((state) => state.gameMode.mode);
+  const difficultyLevel = useAppSelector(
+    (state) => state.difficulty.difficulty
+  );
+
   return (
     <View style={styles.container}>
-      <Text>game</Text>
+      <Text>{gameMode}</Text>
+      <Text>{difficultyLevel}</Text>
     </View>
   );
 }

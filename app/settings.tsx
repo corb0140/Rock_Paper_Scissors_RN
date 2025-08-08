@@ -3,6 +3,10 @@ import {
   difficultyDescription,
   gameModeDescription,
 } from "@/data/descriptions";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { selectDifficulty, setDifficulty } from "@/lib/slices/difficultySlice";
+import { selectGameMode, setGameMode } from "@/lib/slices/gameModeSlice";
+import { selectSoundEnabled, setSound } from "@/lib/slices/soundSlice";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -18,43 +22,36 @@ const Modes = ["Single-Mode", "Tri-Mode", "Power-Mode"];
 const Difficulties = ["Easy", "Medium", "Hard"];
 
 export default function Settings() {
-  const [selectedMode, setSelectedMode] = useState<string>("Single-Mode");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("Easy");
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+  const gameMode = useAppSelector(selectGameMode);
+  const difficultyLevel = useAppSelector(selectDifficulty);
+  const soundEnabled = useAppSelector(selectSoundEnabled);
 
-  const slideAnim = useRef(new Animated.Value(0)).current;
+  const [selectedMode, setSelectedMode] = useState<string>(gameMode);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<string>(difficultyLevel);
+
+  const slideAnim = useRef(new Animated.Value(soundEnabled ? 0 : 1)).current;
 
   useEffect(() => {
-    switch (Modes[0]) {
-      case "Single-Mode":
-        setSelectedMode("Single-Mode");
-        break;
-      case "Tri-Mode":
-        setSelectedMode("Tri-Mode");
-        break;
-      case "Power-Mode":
-        setSelectedMode("Power-Mode");
+    switch (true) {
+      case Modes.includes(selectedMode):
+        setSelectedMode(selectedMode);
         break;
       default:
         console.log("No Mode Selected");
     }
-  }, []);
+  }, [selectedMode]);
 
   useEffect(() => {
-    switch (Difficulties[0]) {
-      case "Easy":
-        setSelectedDifficulty("Easy");
-        break;
-      case "Medium":
-        setSelectedDifficulty("Medium");
-        break;
-      case "Hard":
-        setSelectedDifficulty("Hard");
+    switch (true) {
+      case Difficulties.includes(selectedDifficulty):
+        setSelectedDifficulty(selectedDifficulty);
         break;
       default:
         console.log("No Difficulty Selected");
     }
-  }, []);
+  }, [selectedDifficulty]);
 
   const toggleSound = () => {
     const toValue = soundEnabled ? 1 : 0;
@@ -66,11 +63,26 @@ export default function Settings() {
       useNativeDriver: true,
     }).start();
 
-    setSoundEnabled(!soundEnabled);
+    dispatch(setSound());
+  };
+
+  const saveGameMode = () => {
+    dispatch(
+      setGameMode({
+        mode: selectedMode as "Single-Mode" | "Tri-Mode" | "Power-Mode",
+      })
+    );
+
+    dispatch(
+      setDifficulty({
+        difficulty: selectedDifficulty as "Easy" | "Medium" | "Hard",
+      })
+    );
   };
 
   return (
     <View style={styles.container}>
+      {/* GAME MODE */}
       <View style={{ marginTop: 30 }}>
         <Text>Game Mode</Text>
 
@@ -90,6 +102,7 @@ export default function Settings() {
         </View>
       </View>
 
+      {/* DIFFICULTY   */}
       <View>
         <Text>Difficulty</Text>
 
@@ -109,6 +122,7 @@ export default function Settings() {
         </View>
       </View>
 
+      {/* SOUND */}
       <View style={{ alignSelf: "flex-start" }}>
         <Text>Sound</Text>
 
@@ -139,6 +153,7 @@ export default function Settings() {
         </View>
       </View>
 
+      {/* DESCRIPTION */}
       <View style={styles.descriptionView}>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.descriptionTitle}>{selectedMode}</Text>
@@ -166,6 +181,22 @@ export default function Settings() {
           })}
         </View>
       </View>
+
+      {/* SAVE BUTTON */}
+      <TouchableOpacity
+        style={[
+          styles.modeButton,
+          {
+            alignSelf: "center",
+            flex: 0,
+            marginTop: 20,
+            backgroundColor: Colors.pink,
+          },
+        ]}
+        onPress={saveGameMode}
+      >
+        <Text style={{ color: Colors.white }}>Save Settings</Text>
+      </TouchableOpacity>
     </View>
   );
 }
