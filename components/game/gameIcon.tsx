@@ -11,17 +11,34 @@ const iconMap = {
 
 export type GameIconsProps = {
   iconName: keyof typeof iconMap;
+  setPlayerSelection?: (
+    selection: "rock" | "paper" | "scissors" | null
+  ) => void;
+  iconHeight?: number;
+  iconWidth?: number;
+  imageHeight?: number;
+  imageWidth?: number;
 };
 
-export default function GameIcon({ iconName }: GameIconsProps) {
+export default function GameIcon({
+  iconName,
+  setPlayerSelection,
+  iconHeight = 80,
+  iconWidth = 80,
+  imageHeight = 30,
+  imageWidth = 30,
+}: GameIconsProps) {
   return (
     <Pressable
-      style={styles.container}
-      onPress={() => console.log(`Icon pressed: ${iconName}`)}
+      style={[styles.container, { height: iconHeight, width: iconWidth }]}
+      onPress={() => {
+        setPlayerSelection?.(iconName);
+      }}
     >
       <Image
         source={iconMap[iconName]}
-        style={styles.image}
+        style={{ height: imageHeight, width: imageWidth }}
+        contentPosition="center"
         contentFit="contain"
       />
     </Pressable>
@@ -30,16 +47,10 @@ export default function GameIcon({ iconName }: GameIconsProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
-    width: 80,
     borderWidth: 5,
-    borderRadius: 50,
+    borderRadius: 100,
     backgroundColor: Colors.white,
     justifyContent: "center",
     alignItems: "center",
-  },
-  image: {
-    width: 30,
-    height: 30,
   },
 });
