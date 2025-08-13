@@ -1,31 +1,46 @@
+import { Choice } from "@/app/game";
 import { Colors } from "@/constants/Colors";
-import { useGameLogic } from "@/hooks/gameLogic";
+import {
+  iconHeight,
+  iconWidth,
+  imageHeight,
+  imageWidth,
+} from "@/constants/iconDimensions";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import GameIcon from "./game/gameIcon";
 import HealthBar from "./game/healthBar";
 
-const iconHeight = 100;
-const iconWidth = 100;
-const imageHeight = 50;
-const imageWidth = 50;
+export type SingleModeProps = {
+  playerSelection: Choice;
+  setPlayerSelection: (choice: Choice) => void;
+  aiSelection: Choice;
+  setAiSelection: (choice: Choice) => void;
+  isGameEndVisible: boolean;
+  setGameEndVisible: (visible: boolean) => void;
+  gameResult: "Victory" | "Loss" | null;
+  setGameResult: (result: "Victory" | "Loss" | null) => void;
+  playerHealth: number;
+  aiHealth: number;
+  roundOutcome: "Victory" | "Loss" | "Draw" | null;
+  disableGame: boolean;
+  resetGame: () => void;
+};
 
-export default function SingleMode() {
-  const [playerSelection, setPlayerSelection] = useState<
-    "rock" | "paper" | "scissors" | null
-  >(null);
-  const [aiSelection, setAiSelection] = useState<
-    "rock" | "paper" | "scissors" | null
-  >(null);
-
-  const { playerHealth, aiHealth, roundOutcome, resetGame } = useGameLogic({
-    initialPlayerHealth: 250,
-    initialAiHealth: 250,
-    playerChoice: playerSelection,
-    aiChoice: aiSelection,
-  });
-
+export default function SingleMode({
+  playerSelection,
+  setPlayerSelection,
+  aiSelection,
+  setAiSelection,
+  setGameEndVisible,
+  setGameResult,
+  playerHealth,
+  aiHealth,
+  roundOutcome,
+  disableGame,
+  resetGame,
+}: SingleModeProps) {
   const handleConfirmButton = () => {
     const choices = ["rock", "paper", "scissors"] as const;
     const randomChoice = choices[Math.floor(Math.random() * choices.length)];
@@ -45,8 +60,6 @@ export default function SingleMode() {
           text: "OK",
           onPress: () => {
             resetGame();
-            setPlayerSelection(null);
-            setAiSelection(null);
           },
         },
       ],
@@ -55,8 +68,15 @@ export default function SingleMode() {
   };
 
   useEffect(() => {
-    console.log("Player selection changed:", playerSelection);
-  }, [playerSelection]);
+    if (playerHealth <= 0) {
+      setGameResult("Loss");
+      setGameEndVisible(true);
+    } else if (aiHealth <= 0) {
+      setGameResult("Victory");
+      setGameEndVisible(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerHealth, aiHealth]);
 
   return (
     <View style={styles.container}>
@@ -130,7 +150,7 @@ export default function SingleMode() {
         <Pressable
           style={styles.button}
           onPress={handleConfirmButton}
-          disabled={!playerSelection}
+          disabled={!playerSelection || disableGame}
         >
           <Ionicons name="checkmark" size={24} color={Colors.lightBlue} />
         </Pressable>
