@@ -3,6 +3,7 @@
     "name": "RockPaperScissors",
     "slug": "RockPaperScissors",
     "version": "1.0.0",
+    "owner": "kolizak",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "rockpaperscissors",
@@ -16,7 +17,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kolizak.RockPaperScissors"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +39,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7e68cc21-d617-4a8d-99f3-53697459e4a9"
+      }
     }
   }
 }
