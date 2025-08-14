@@ -7,7 +7,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import GameEndModal from "@/components/GameEndModal";
+import PowerMode from "@/components/PowerMode";
 import SingleMode from "@/components/SingleMode";
+import TriMode from "@/components/TriMode";
 
 export type Choice = "rock" | "paper" | "scissors" | null;
 
@@ -17,17 +19,23 @@ export default function Game() {
     (state) => state.difficulty.difficulty
   );
 
+  // SINGLE MODE
   const [playerSelection, setPlayerSelection] = useState<Choice>(null);
   const [aiSelection, setAiSelection] = useState<Choice>(null);
+
+  // TRI MODE
+  const [playerSelections, setPlayerSelections] = useState<Choice[]>([]);
+  const [aiSelections, setAiSelections] = useState<Choice[]>([]);
+
   const [isGameEndVisible, setGameEndVisible] = useState(false);
   const [gameResult, setGameResult] = useState<"Victory" | "Loss" | null>(null);
 
   const { playerHealth, aiHealth, roundOutcome, disableGame, resetGame } =
     useGameLogic({
-      initialPlayerHealth: 250,
-      initialAiHealth: 250,
       playerChoice: playerSelection,
       aiChoice: aiSelection,
+      playerChoices: playerSelections,
+      aiChoices: aiSelections,
     });
 
   const handleRestart = () => {
@@ -36,6 +44,8 @@ export default function Game() {
     setAiSelection(null);
     setGameEndVisible(false);
     setGameResult(null);
+    setPlayerSelections([]);
+    setAiSelections([]);
   };
 
   return (
@@ -58,26 +68,46 @@ export default function Game() {
 
           {/* GAME AREA */}
           <View style={{ flex: 1 }}>
-            <SingleMode
-              playerSelection={playerSelection}
-              setPlayerSelection={setPlayerSelection}
-              aiSelection={aiSelection}
-              setAiSelection={setAiSelection}
-              isGameEndVisible={isGameEndVisible}
-              setGameEndVisible={setGameEndVisible}
-              gameResult={gameResult}
-              setGameResult={setGameResult}
-              playerHealth={playerHealth}
-              aiHealth={aiHealth}
-              roundOutcome={roundOutcome}
-              disableGame={disableGame}
-              resetGame={handleRestart}
-            />
+            {gameMode === "Power-Mode" && <PowerMode />}
+            {gameMode === "Tri-Mode" && (
+              <TriMode
+                playerSelections={playerSelections}
+                setPlayerSelections={setPlayerSelections}
+                aiSelections={aiSelections}
+                setAiSelections={setAiSelections}
+                isGameEndVisible={isGameEndVisible}
+                setGameEndVisible={setGameEndVisible}
+                gameResult={gameResult}
+                setGameResult={setGameResult}
+                playerHealth={playerHealth}
+                aiHealth={aiHealth}
+                roundOutcome={roundOutcome}
+                disableGame={disableGame}
+                resetGame={handleRestart}
+              />
+            )}
+            {gameMode === "Single-Mode" && (
+              <SingleMode
+                playerSelection={playerSelection}
+                setPlayerSelection={setPlayerSelection}
+                aiSelection={aiSelection}
+                setAiSelection={setAiSelection}
+                isGameEndVisible={isGameEndVisible}
+                setGameEndVisible={setGameEndVisible}
+                gameResult={gameResult}
+                setGameResult={setGameResult}
+                playerHealth={playerHealth}
+                aiHealth={aiHealth}
+                roundOutcome={roundOutcome}
+                disableGame={disableGame}
+                resetGame={handleRestart}
+              />
+            )}
           </View>
         </SafeAreaView>
       </View>
 
-      {/* GAME END MODAL (now at game level) */}
+      {/* GAME END MODAL*/}
       {isGameEndVisible && (
         <GameEndModal
           result={gameResult}

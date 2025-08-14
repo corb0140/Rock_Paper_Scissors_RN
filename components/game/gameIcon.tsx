@@ -7,7 +7,7 @@ const iconMap = {
   rock: require("../../assets/images/rock.png"),
   paper: require("../../assets/images/paper.png"),
   scissors: require("../../assets/images/scissors.png"),
-} as const;
+} as const; // as const ensures that the keys are treated as literal types
 
 export type GameIconsProps = {
   iconName: keyof typeof iconMap;

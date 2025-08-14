@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export type HealthBarProps = {
   health: number; // Optional prop to set player health
@@ -10,6 +10,8 @@ export default function HealthBar({ health }: HealthBarProps) {
   return (
     <View style={styles.bar}>
       <View style={[styles.health, { width: health }]}></View>
+
+      <Text style={{ fontFamily: "Inter-Regular" }}>{health}</Text>
     </View>
   );
 }
@@ -22,6 +24,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGray,
     borderRadius: 10,
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
   },
   health: {
     position: "absolute",

@@ -9,8 +9,6 @@ export const gameModeDescription: any = {
 
 export const difficultyDescription: any = {
   Easy: "The computer health is equal to the player health and deals normal damage.",
-  Medium: "The computer has double the health of the player.",
-  Hard: "The computer has double the health of the player and deals double damage.",
+  Medium: "The computer takes 10 less damage than the player.",
+  Hard: "The computer takes 10 less damage than the player and deals 10 more damage.",
 };
-
-// Each player has a health bar that decreases by the amount of losses each round. The game continues until one player's health bar is completely depleted.

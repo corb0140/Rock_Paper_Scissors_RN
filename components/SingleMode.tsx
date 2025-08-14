@@ -12,7 +12,7 @@ import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import GameIcon from "./game/gameIcon";
 import HealthBar from "./game/healthBar";
 
-export type SingleModeProps = {
+export type ModeProps = {
   playerSelection: Choice;
   setPlayerSelection: (choice: Choice) => void;
   aiSelection: Choice;
@@ -40,7 +40,7 @@ export default function SingleMode({
   roundOutcome,
   disableGame,
   resetGame,
-}: SingleModeProps) {
+}: ModeProps) {
   const handleConfirmButton = () => {
     const choices = ["rock", "paper", "scissors"] as const;
     const randomChoice = choices[Math.floor(Math.random() * choices.length)];
