@@ -1,0 +1,55 @@
+export default {
+  expo: {
+    name: "RockPaperScissors",
+    slug: "RockPaperScissors",
+    version: "1.0.0",
+    owner: "kolizak",
+    orientation: "portrait",
+    icon: "./assets/images/icon.png",
+    scheme: "rockpaperscissors",
+    userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    ios: {
+      supportsTablet: true,
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/adaptive-icon.png",
+        backgroundColor: "#ffffff",
+      },
+      edgeToEdgeEnabled: true,
+    },
+    web: {
+      bundler: "metro",
+      output: "static",
+      favicon: "./assets/images/favicon.png",
+    },
+    plugins: [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          image: "./assets/images/splash-icon.png",
+          imageWidth: 200,
+          resizeMode: "contain",
+          backgroundColor: "#ffffff",
+        },
+      ],
+    ],
+    experiments: {
+      typedRoutes: true,
+    },
+    extra: {
+      router: {},
+      eas: {
+        projectId: "7e68cc21-d617-4a8d-99f3-53697459e4a9",
+      },
+    },
+    runtimeVersion: {
+      policy: "appVersion",
+    },
+    updates: {
+      url: "https://u.expo.dev/7e68cc21-d617-4a8d-99f3-53697459e4a9",
+    },
+  },
+};

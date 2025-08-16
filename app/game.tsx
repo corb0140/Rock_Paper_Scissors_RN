@@ -68,7 +68,23 @@ export default function Game() {
 
           {/* GAME AREA */}
           <View style={{ flex: 1 }}>
-            {gameMode === "Power-Mode" && <PowerMode />}
+            {gameMode === "Power-Mode" && (
+              <PowerMode
+                playerSelection={playerSelection}
+                setPlayerSelection={setPlayerSelection}
+                aiSelection={aiSelection}
+                setAiSelection={setAiSelection}
+                isGameEndVisible={isGameEndVisible}
+                setGameEndVisible={setGameEndVisible}
+                gameResult={gameResult}
+                setGameResult={setGameResult}
+                playerHealth={playerHealth}
+                aiHealth={aiHealth}
+                roundOutcome={roundOutcome}
+                disableGame={disableGame}
+                resetGame={handleRestart}
+              />
+            )}
             {gameMode === "Tri-Mode" && (
               <TriMode
                 playerSelections={playerSelections}

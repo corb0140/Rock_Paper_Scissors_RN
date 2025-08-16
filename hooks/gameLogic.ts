@@ -1,3 +1,4 @@
+import { Power } from "@/data/powers";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "./reduxHooks";
 
@@ -90,16 +91,98 @@ export const useGameLogic = ({
       // Determine round outcome
       if (playerWins > aiWins) {
         setRoundOutcome("Victory");
-        setAiHealth((prev) => prev - (playerWins - aiWins) * 10);
+        setAiHealth((prev) => {
+          if (difficultyLevel === "Easy")
+            return prev - (playerWins - aiWins) * 10;
+          if (difficultyLevel === "Medium")
+            return prev - (playerWins - aiWins) * 10;
+          return prev - (playerWins - aiWins) * 10;
+        });
       } else if (aiWins > playerWins) {
         setRoundOutcome("Loss");
-        setPlayerHealth((prev) => prev - (aiWins - playerWins) * 10);
+        setPlayerHealth((prev) => {
+          if (difficultyLevel === "Easy")
+            return prev - (aiWins - playerWins) * 10;
+          if (difficultyLevel === "Medium")
+            return prev - (aiWins - playerWins) * 15;
+          return prev - (aiWins - playerWins) * 20;
+        });
       } else {
         setRoundOutcome("Draw");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aiChoices]);
+
+  //  POWER MODE
+  useEffect(() => {
+    const applyPowerEffects = (
+      choice: "rock" | "paper" | "scissors",
+      power: Power | null,
+      isPlayer: boolean
+    ) => {
+      if (!power) return;
+
+      if (power.effect === "heal") {
+        if (isPlayer) setPlayerHealth((prev) => prev + 20);
+        else setAiHealth((prev) => prev + 20);
+      }
+
+      if (power.effect === "swapHealth") {
+        setPlayerHealth(aiHealth);
+        setAiHealth(playerHealth);
+      }
+
+      if (power.effect === "autoWin") {
+        setRoundOutcome(isPlayer ? "Victory" : "Loss");
+        return "autoWin";
+      }
+
+      if (power.effect === "moreDamage") {
+        if (roundOutcome === "Victory") {
+          if (isPlayer) {
+            setAiHealth((prev) => prev - 10);
+          }
+        }
+      }
+
+      if (power.effect === "blockAll") {
+        if (roundOutcome === "Loss") {
+          if (isPlayer) {
+            setPlayerHealth(
+              (prev) =>
+                prev +
+                (difficultyLevel === "Easy"
+                  ? 25
+                  : difficultyLevel === "Medium"
+                  ? 35
+                  : 35)
+            );
+          }
+        }
+      }
+
+      if (power.effect === "halfBlock") {
+        if (roundOutcome === "Loss") {
+          if (isPlayer) {
+            setPlayerHealth(
+              (prev) =>
+                prev +
+                (difficultyLevel === "Easy"
+                  ? 12
+                  : difficultyLevel === "Medium"
+                  ? 18
+                  : 20)
+            );
+          }
+        }
+      }
+    };
+
+    applyPowerEffects(playerChoice || "rock", null, true);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aiHealth]);
 
   // Handle disabling game end
   useEffect(() => {
